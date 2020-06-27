@@ -1,15 +1,14 @@
 //
-//  main.c
+//  takehome.h
 //  OsensaISE
 //
 //  Created by Jose Hermilo Ortega Martinez on 2020-06-26.
 //  Copyright © 2020 Jose Hermilo Ortega Martinez. All rights reserved.
 //
 
+#ifndef takehome_h
+#define takehome_h
+
 #include <stdio.h>
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    printf("Hello, World!\n");
-    return 0;
-}
+#endif /* takehome_h */

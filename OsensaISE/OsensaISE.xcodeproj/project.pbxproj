@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D0095CC824A6D8FE00674B3A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = D0095CC724A6D8FE00674B3A /* main.c */; };
+		D0095CD024A6DAB300674B3A /* takehome.c in Sources */ = {isa = PBXBuildFile; fileRef = D0095CCF24A6DAB300674B3A /* takehome.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,8 @@
 
 /* Begin PBXFileReference section */
 		D0095CC424A6D8FE00674B3A /* OsensaISE */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OsensaISE; sourceTree = BUILT_PRODUCTS_DIR; };
-		D0095CC724A6D8FE00674B3A /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		D0095CCE24A6DAB300674B3A /* takehome.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = takehome.h; sourceTree = "<group>"; };
+		D0095CCF24A6DAB300674B3A /* takehome.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = takehome.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +58,8 @@
 		D0095CC624A6D8FE00674B3A /* OsensaISE */ = {
 			isa = PBXGroup;
 			children = (
-				D0095CC724A6D8FE00674B3A /* main.c */,
+				D0095CCE24A6DAB300674B3A /* takehome.h */,
+				D0095CCF24A6DAB300674B3A /* takehome.c */,
 			);
 			path = OsensaISE;
 			sourceTree = "<group>";
@@ -119,7 +121,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0095CC824A6D8FE00674B3A /* main.c in Sources */,
+				D0095CD024A6DAB300674B3A /* takehome.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
