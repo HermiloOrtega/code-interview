@@ -13,11 +13,12 @@
 #include <unistd.h>
 
 #define _CANDIDATE_ "Jose Hermilo Ortega Martinez"
-#define _KELVIN_ 273.15
-#define _SIZE_ 1024
-#define _INITIAL_SIZE_ 0
-#define _INITIAL_CAPACITY_ 0
+#define _KELVIN_            273.15
+#define _SIZE_              1024
+#define _INITIAL_SIZE_      0
+#define _INITIAL_CAPACITY_  0
 
+/// GLOBAL VARIABLES
 int     _size             = _INITIAL_SIZE_;
 int     _capacity         = _INITIAL_CAPACITY_;
 
@@ -34,7 +35,6 @@ float* push                  (float *arr, int index, float value){
     _size = _size + 1;
     return arr;
 }
-
 
 /// function to validate rows in the csv file
 /// @param buf buffer of the row
@@ -276,8 +276,6 @@ int main() {
     char option, path[_SIZE_];
     float  *dataTemperatures = malloc(_INITIAL_CAPACITY_ * sizeof(int));
     do {
-        // /Users/hermilo/Desktop/temperatureReportOK.csv
-        // /Users/hermilo/Desktop/temperatureReportError.csv
         printf("\n==== Menu ====\n");
         printf("1: Charge file\n");
         printf("2: Show Results\n");
