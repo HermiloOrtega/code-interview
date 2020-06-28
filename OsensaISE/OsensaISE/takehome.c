@@ -5,6 +5,10 @@
 //  Created by Jose Hermilo Ortega Martinez on 2020-06-26.
 //  Copyright © 2020 Jose Hermilo Ortega Martinez. All rights reserved.
 //
+
+//#define _PATH_ "/Users/hermilo/Desktop/temperatureReportError.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
+#define _PATH_ "/Users/hermilo/Desktop/temperatureReportOK.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,8 +51,7 @@ float* chargeFile            (float *dataTemperatures){
          array_index      = 0,
          chargeFile       = 1;
     
-    FILE *fp = fopen("/Users/hermilo/Desktop/temperatureReportOK.csv", "r");
-    //FILE *fp = fopen("/Users/hermilo/Desktop/temperatureReportError.csv", "r");
+    FILE *fp = fopen(_PATH_, "r");
     
     if (!fp) {
         printf("Can't open file\n");
@@ -92,7 +95,7 @@ float* chargeFile            (float *dataTemperatures){
     } else{
         char indicator[i];
         for (int j = 0; j <= i; j++) indicator[j]=(j==i)?'^':' ';
-        printf("\nError in the line number %d\n%s%s\nPlease check the line above and check if all the row has only numbers\n", row_count, buf,indicator);
+        printf("\nError in the line number %d\n%s%s\nPlease check the line above in the file\n", row_count, buf,indicator);
         return NULL;
     }
 }
@@ -251,8 +254,8 @@ void showResults(float *dataTemperatures){
 */
 int main() {
     char option;
+    float  *dataTemperatures = malloc(_INITIAL_CAPACITY_ * sizeof(int));
     do {
-        float  *dataTemperatures = malloc(_INITIAL_CAPACITY_ * sizeof(int));
         printf("\n==== Menu ====\n");
         printf("1: Charge file\n");
         printf("2: Show Results\n");
@@ -260,7 +263,10 @@ int main() {
         printf("Choose one option (type the number): \n");
         scanf("%c",&option);
         switch (option) {
-            case '1': dataTemperatures = chargeFile(dataTemperatures);  break;
+            case '1':
+                dataTemperatures = chargeFile(dataTemperatures);
+                if (dataTemperatures == NULL) dataTemperatures = malloc(_INITIAL_CAPACITY_ * sizeof(int));
+                break;
             case '2': showResults(dataTemperatures);                    break;
             case '3': return(0);                                        break;
             default: printf("Wrong option, please type again the number of your option"); break;
