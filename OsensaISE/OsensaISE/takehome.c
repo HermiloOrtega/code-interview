@@ -6,13 +6,12 @@
 //  Copyright © 2020 Jose Hermilo Ortega Martinez. All rights reserved.
 //
 
-//#define _PATH_ "/Users/hermilo/Desktop/temperatureReportError.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
-#define _PATH_ "/Users/hermilo/Desktop/temperatureReportOK.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <unistd.h>
+
 #define _CANDIDATE_ "Jose Hermilo Ortega Martinez"
 #define _KELVIN_ 273.15
 #define _SIZE_ 1024
@@ -57,7 +56,7 @@ int validateFile(char buf[_SIZE_], int i){
 
 /// function to charge information from the csv file
 /// @param dataTemperatures empty array of temperatures to fill with the csv file
-float* chargeFile            (float *dataTemperatures){
+float* chargeFile            (float *dataTemperatures, char path[]){
     _size     = _INITIAL_SIZE_;
     _capacity = _INITIAL_CAPACITY_;
     char buf[_SIZE_],
@@ -70,7 +69,7 @@ float* chargeFile            (float *dataTemperatures){
          array_index      = 0,
          errorNumber      = 0;
     
-    FILE *fp = fopen(_PATH_, "r");
+    FILE *fp = fopen(path, "r");
     if (!fp) {
         printf("Can't open file\n");
         return NULL;
@@ -119,7 +118,7 @@ float* chargeFile            (float *dataTemperatures){
         printf("\nError in the line number %d\n%s%s\nPlease check the line above in the file.\n", row_count, buf,indicator);
         return NULL;
     }else{
-        printf("The file has been charged...");
+        printf("The file has been charged.\n");
         return dataTemperatures;
     }
 }
@@ -220,7 +219,6 @@ float convertKelvinToCelcius    (float kelvin){ return kelvin-_KELVIN_;         
 /// @param kelvin value in kelvin
 float convertKelvinToFahrenheit (float kelvin){ return (kelvin-_KELVIN_)*9/5+32; }
 
-
 /// Funtion to show the results
 /// @param dataTemperatures array with temperatures from the csv
 void showResults(float *dataTemperatures){
@@ -246,11 +244,10 @@ void showResults(float *dataTemperatures){
     printf("====================================================\n");
 }
 
-/*
+ /*
  Write a C Program that takes as an input a comma-separated values (CSV) file that contains rows of
  UNIX time, temperature, other stuff 1, other stuff 2, ...
  and outputs the following text file (filled in correctly of course!):*/
-
  /*====================================================
  OSENSA Junior Software Engineer Take-fome Assignment
  Written by: Jose Hermilo Ortega Martinez
@@ -263,7 +260,6 @@ void showResults(float *dataTemperatures){
     Min (Min):
     Stdev (Stdev):
  ====================================================*/
-
  /*Things to assume:
     - The temperature values are floating point number in Kelvin
     - The first row of the CSV file contains header information that you'll need to ignore
@@ -277,23 +273,39 @@ void showResults(float *dataTemperatures){
  Submit your code to *******@******* before midnight on Sunday
 */
 int main() {
-    char option;
+    char option, path[_SIZE_];
     float  *dataTemperatures = malloc(_INITIAL_CAPACITY_ * sizeof(int));
     do {
+        // /Users/hermilo/Desktop/temperatureReportOK.csv
+        // /Users/hermilo/Desktop/temperatureReportError.csv
         printf("\n==== Menu ====\n");
         printf("1: Charge file\n");
         printf("2: Show Results\n");
         printf("3: Exit\n");
         printf("Choose one option (type the number): \n");
         scanf("%c",&option);
-        switch (option) {
-            case '1':
-                dataTemperatures = chargeFile(dataTemperatures);
-                if (dataTemperatures == NULL) dataTemperatures = malloc(_INITIAL_CAPACITY_ * sizeof(int));
-                break;
-            case '2': showResults(dataTemperatures);                    break;
-            case '3': return(0);                                        break;
-            default: printf("Wrong option, please type again the number of your option"); break;
+        if (option != '\n') {
+            switch (option) {
+                case '1':
+                        printf("Please write the path of the file (.csv): \n");
+                        scanf("%s", path);
+                        dataTemperatures = chargeFile(dataTemperatures,path);
+                        if (dataTemperatures == NULL){
+                            dataTemperatures = malloc(_INITIAL_CAPACITY_ * sizeof(int));
+                            _size = 0;
+                        }
+                    break;
+                case '2':
+                        if (_size > 0) showResults(dataTemperatures);
+                        else { printf("Please charge a file to generate the report."); }
+                    break;
+                case '3':
+                    return(0);
+                    break;
+                default:
+                    printf("Wrong option, please type again the number of your option");
+                    break;
+            }
         }
         while( option!='\n' && (option=getchar())!='\n' && option!= EOF);
     }while (1);
