@@ -6,8 +6,8 @@
 //  Copyright © 2020 Jose Hermilo Ortega Martinez. All rights reserved.
 //
 
-#define _PATH_ "/Users/hermilo/Desktop/temperatureReportError.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
-//#define _PATH_ "/Users/hermilo/Desktop/temperatureReportOK.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
+//#define _PATH_ "/Users/hermilo/Desktop/temperatureReportError.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
+#define _PATH_ "/Users/hermilo/Desktop/temperatureReportOK.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
 
 #include <stdio.h>
 #include <stdlib.h>
