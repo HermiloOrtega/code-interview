@@ -35,6 +35,8 @@ float* push                  (float *arr, int index, float value){
 /// function to charge information from the csv file
 /// @param dataTemperatures empty array of temperatures to fill with the csv file
 float* chargeFile            (float *dataTemperatures){
+    _size     = _INITIAL_SIZE_;
+    _capacity = _INITIAL_CAPACITY_;
     char buf[_SIZE_],
          token[_SIZE_];
     int  row_count        = 0,
@@ -42,9 +44,12 @@ float* chargeFile            (float *dataTemperatures){
          in_double_quotes = 0,
          token_pos        = 0,
          i                = 0,
-         array_index      = 0;
+         array_index      = 0,
+         chargeFile       = 1;
     
     FILE *fp = fopen("/Users/hermilo/Desktop/temperatureReportOK.csv", "r");
+    //FILE *fp = fopen("/Users/hermilo/Desktop/temperatureReportError.csv", "r");
+    
     if (!fp) {
         printf("Can't open file\n");
         return NULL;
@@ -56,6 +61,12 @@ float* chargeFile            (float *dataTemperatures){
         i = 0;
         do {
             token[token_pos++] = buf[i];
+            if (buf[i] != '1' && buf[i] != '2' && buf[i] != '3' && buf[i] != '4' && buf[i] != '5' &&
+                buf[i] != '6' && buf[i] != '7' && buf[i] != '8' && buf[i] != '9' && buf[i] != '0' &&
+                buf[i] != ',' && buf[i] != '\r' && buf[i] != '\n' && buf[i] != '.'){
+                chargeFile = 0;
+                break;
+            }
             if (!in_double_quotes && (buf[i] == ',' || buf[i] == '\n')) {
                 token[token_pos - 1] = 0;
                 token_pos = 0;
@@ -72,10 +83,18 @@ float* chargeFile            (float *dataTemperatures){
             if (buf[i] == '"' && buf[i + 1] == '"')
                 i++;
         } while (buf[++i]);
+        if (chargeFile == 0) break;
     }
     fclose(fp);
-    printf("The file has been charged...");
-    return dataTemperatures;
+    if (chargeFile == 1) {
+        printf("The file has been charged...");
+        return dataTemperatures;
+    } else{
+        char indicator[i];
+        for (int j = 0; j <= i; j++) indicator[j]=(j==i)?'^':' ';
+        printf("\nError in the line number %d\n%s%s\nPlease check the line above and check if all the row has only numbers\n", row_count, buf,indicator);
+        return NULL;
+    }
 }
 
 /// function to short the data of temperatures
@@ -232,8 +251,8 @@ void showResults(float *dataTemperatures){
 */
 int main() {
     char option;
-    float  *dataTemperatures = malloc(_INITIAL_CAPACITY_ * sizeof(int));
     do {
+        float  *dataTemperatures = malloc(_INITIAL_CAPACITY_ * sizeof(int));
         printf("\n==== Menu ====\n");
         printf("1: Charge file\n");
         printf("2: Show Results\n");
