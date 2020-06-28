@@ -6,8 +6,8 @@
 //  Copyright © 2020 Jose Hermilo Ortega Martinez. All rights reserved.
 //
 
-//#define _PATH_ "/Users/hermilo/Desktop/temperatureReportError.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
-#define _PATH_ "/Users/hermilo/Desktop/temperatureReportOK.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
+#define _PATH_ "/Users/hermilo/Desktop/temperatureReportError.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
+//#define _PATH_ "/Users/hermilo/Desktop/temperatureReportOK.csv" // CHANGE THIS PATH TO TEST DIFFERENT FILES
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,6 +36,25 @@ float* push                  (float *arr, int index, float value){
     return arr;
 }
 
+
+/// function to validate rows in the csv file
+/// @param buf buffer of the row
+/// @param i position
+int validateFile(char buf[_SIZE_], int i){
+    if (buf[0] == ',') {
+        return 1;
+    }
+    if (buf[11] == ',' || buf[11] == '0') {
+        return 2;
+    }
+    if (buf[i] != '1' && buf[i] != '2' && buf[i] != '3' && buf[i] != '4' && buf[i] != '5' &&
+        buf[i] != '6' && buf[i] != '7' && buf[i] != '8' && buf[i] != '9' && buf[i] != '0' &&
+        buf[i] != ',' && buf[i] != '\r' && buf[i] != '\n' && buf[i] != '.'){
+        return 3;
+    }
+    return 0;
+}
+
 /// function to charge information from the csv file
 /// @param dataTemperatures empty array of temperatures to fill with the csv file
 float* chargeFile            (float *dataTemperatures){
@@ -49,27 +68,25 @@ float* chargeFile            (float *dataTemperatures){
          token_pos        = 0,
          i                = 0,
          array_index      = 0,
-         chargeFile       = 1;
+         errorNumber      = 0;
     
     FILE *fp = fopen(_PATH_, "r");
-    
     if (!fp) {
         printf("Can't open file\n");
         return NULL;
     }
     while (fgets(buf, _SIZE_, fp)) {
         row_count++;
-        if (row_count == 1) continue; // Ignore first row
+        if (row_count == 1) continue;
         fieldIndex = 0;
         i = 0;
         do {
-            token[token_pos++] = buf[i];
-            if (buf[i] != '1' && buf[i] != '2' && buf[i] != '3' && buf[i] != '4' && buf[i] != '5' &&
-                buf[i] != '6' && buf[i] != '7' && buf[i] != '8' && buf[i] != '9' && buf[i] != '0' &&
-                buf[i] != ',' && buf[i] != '\r' && buf[i] != '\n' && buf[i] != '.'){
-                chargeFile = 0;
+            int errNumber = validateFile(buf,i);
+            if (errNumber != 0) {
+                errorNumber = errNumber;
                 break;
             }
+            token[token_pos++] = buf[i];
             if (!in_double_quotes && (buf[i] == ',' || buf[i] == '\n')) {
                 token[token_pos - 1] = 0;
                 token_pos = 0;
@@ -86,17 +103,24 @@ float* chargeFile            (float *dataTemperatures){
             if (buf[i] == '"' && buf[i + 1] == '"')
                 i++;
         } while (buf[++i]);
-        if (chargeFile == 0) break;
+        
+        if (errorNumber != 0) break;
     }
     fclose(fp);
-    if (chargeFile == 1) {
-        printf("The file has been charged...");
-        return dataTemperatures;
-    } else{
+    if (errorNumber == 1) {
+        printf("\nError in the line number %d\n%s\nThe UNIX Time is empty, please check the line above in the file.\n", row_count, buf);
+        return NULL;
+    }else if (errorNumber == 2){
+        printf("\nError in the line number %d\n%s\nThe Temperature is empty or with a value 0, please check the line above in the file.\n", row_count, buf);
+        return NULL;
+    }else if (errorNumber == 3){
         char indicator[i];
         for (int j = 0; j <= i; j++) indicator[j]=(j==i)?'^':' ';
-        printf("\nError in the line number %d\n%s%s\nPlease check the line above in the file\n", row_count, buf,indicator);
+        printf("\nError in the line number %d\n%s%s\nPlease check the line above in the file.\n", row_count, buf,indicator);
         return NULL;
+    }else{
+        printf("The file has been charged...");
+        return dataTemperatures;
     }
 }
 
